@@ -14,4 +14,15 @@ variables:
 
 steps:
 - script: dotnet build ./src/api/Koai.HR/Koai.HR.Api/Koai.HR.Api.csproj --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  displayName: 'BUILD Koai.HR $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: PUBLISH Koai.HR
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'Koai-HR-API'
